@@ -77,10 +77,10 @@
                 <div class="category-sidebar">
                     <h5>Categories</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#">Fruits</a></li>
-                        <li><a href="#">Vegetables</a></li>
-                        <li><a href="#">Grains</a></li>
-                        <li><a href="#">Dairy</a></li>
+                        <li><a href="#" onclick="filterProducts('Fruits')">Fruits</a></li>
+                        <li><a href="#" onclick="filterProducts('Vegetables')">Vegetables</a></li>
+                        <li><a href="#" onclick="filterProducts('Grains')">Grains</a></li>
+                        <li><a href="#" onclick="filterProducts('Dairy')">Dairy</a></li>
                     </ul>
                 </div>
             </div>
@@ -101,30 +101,23 @@
     <script>
         // Sample product data
         const products = [
-            {
-                name: "Fresh Tomatoes",
-                price: 30,
-                stock: 100,
-                imageUrl: "https://via.placeholder.com/300x200?text=Tomatoes"
-            },
-            {
-                name: "Organic Wheat",
-                price: 50,
-                stock: 50,
-                imageUrl: "https://via.placeholder.com/300x200?text=Wheat"
-            },
-            {
-                name: "Dairy Milk",
-                price: 60,
-                stock: 20,
-                imageUrl: "https://via.placeholder.com/300x200?text=Milk"
-            }
+            { category: 'Fruits', name: 'Apples', price: 120, stock: 30, imageUrl: 'https://via.placeholder.com/300x200?text=Apples' },
+            { category: 'Fruits', name: 'Bananas', price: 50, stock: 100, imageUrl: 'https://via.placeholder.com/300x200?text=Bananas' },
+            { category: 'Vegetables', name: 'Carrots', price: 40, stock: 80, imageUrl: 'https://via.placeholder.com/300x200?text=Carrots' },
+            { category: 'Vegetables', name: 'Broccoli', price: 70, stock: 40, imageUrl: 'https://via.placeholder.com/300x200?text=Broccoli' },
+            { category: 'Grains', name: 'Wheat', price: 60, stock: 50, imageUrl: 'https://via.placeholder.com/300x200?text=Wheat' },
+            { category: 'Grains', name: 'Rice', price: 80, stock: 90, imageUrl: 'https://via.placeholder.com/300x200?text=Rice' },
+            { category: 'Dairy', name: 'Milk', price: 50, stock: 70, imageUrl: 'https://via.placeholder.com/300x200?text=Milk' },
+            { category: 'Dairy', name: 'Cheese', price: 200, stock: 20, imageUrl: 'https://via.placeholder.com/300x200?text=Cheese' }
         ];
 
+        const cart = [];
+
         // Function to display products
-        const displayProducts = () => {
+        const displayProducts = (filteredProducts) => {
             const productList = document.getElementById("product-list");
-            products.forEach(product => {
+            productList.innerHTML = '';
+            filteredProducts.forEach(product => {
                 const productCard = document.createElement("div");
                 productCard.className = "col-md-4";
                 productCard.innerHTML = `
@@ -134,7 +127,7 @@
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-price">₹${product.price}</p>
                             <p class="card-text">Stock: ${product.stock}</p>
-                            <button class="btn btn-success">Add to Cart</button>
+                            <button class="btn btn-success" onclick="addToCart('${product.name}')">Add to Cart</button>
                         </div>
                     </div>
                 `;
@@ -142,8 +135,23 @@
             });
         };
 
-        // Load products on page load
-        document.addEventListener("DOMContentLoaded", displayProducts);
+        // Function to filter products by category
+        const filterProducts = (category) => {
+            const filteredProducts = products.filter(product => product.category === category);
+            displayProducts(filteredProducts);
+        };
+
+        // Function to add items to the cart
+        const addToCart = (productName) => {
+            const product = products.find(p => p.name === productName);
+            if (product) {
+                cart.push(product);
+                alert(`${product.name} has been added to your cart.`);
+            }
+        };
+
+        // Load all products on page load
+        document.addEventListener("DOMContentLoaded", () => displayProducts(products));
     </script>
 </body>
 </html>
